@@ -1,13 +1,34 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package Modelo;
 
-/**
- *
- * @author daniel
- */
+import java.math.BigDecimal;
+
 public class ItemVenta {
     
+    private final Celular celular;
+    private final int cantidad;
+    private final BigDecimal precioUnitario;
+
+    public ItemVenta(Celular celular, int cantidad, BigDecimal precioUnitario) {
+        this.celular = celular;
+        this.cantidad = cantidad;
+        this.precioUnitario = precioUnitario;
+    }
+
+    public Celular getCelular() {
+        return celular;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public BigDecimal getPrecioUnitario() {
+        return precioUnitario;
+    }
+
+    
+    public BigDecimal getSubtotal() {
+        return precioUnitario.multiply(BigDecimal.valueOf(cantidad));
+    }
 }
