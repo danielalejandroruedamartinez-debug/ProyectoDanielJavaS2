@@ -1,7 +1,6 @@
 Servicio/GestorVentas.class
 Persistencia/UsuarioDAO.class
 Vista/MenuAdministrador.class
-Persistencia/ConexionDB$ConexionDBHolder.class
 Vista/MenuPrincipal.class
 Persistencia/SqlHelper.class
 Excepciones/DatosInvalidosException.class

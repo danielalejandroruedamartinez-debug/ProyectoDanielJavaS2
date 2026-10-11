@@ -1,30 +1,43 @@
 
 package com.clases.proyectodanieljava;
 
-import Modelo.CategoriaGama;
-import Modelo.Celular;
-import Modelo.ItemVenta;
-import Modelo.Venta;
+import Excepciones.DatosInvalidosException;
+import Excepciones.ErrorSistemaException;
+import Persistencia.ConexionDB;
+import Util.Validador;
 import java.math.BigDecimal;
 
 public class Main {
 
     public static void main(String[] args) {
-        Celular galaxy = new Celular();
-        galaxy.setMarca("Samsung");
-        galaxy.setModelo("Galaxy S24");
+        try {
+            ConexionDB.getInstancia().getConexion();
+            System.out.println("Conexión abierta correctamente");
+            System.out.println("Singleton (misma instancia): "
+                    + (ConexionDB.getInstancia() == ConexionDB.getInstancia()));
+        } catch (ErrorSistemaException e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            ConexionDB.getInstancia().cerrar();
+        }
 
-        Celular moto = new Celular();
-        moto.setMarca("Motorola");
-        moto.setModelo("Moto G14");
+        probar("nombre con espacios", () -> Validador.noVacio("  Ana ", "El nombre"));
+        probar("nombre vacío", () -> Validador.noVacio("   ", "El nombre"));
+        probar("correo bueno", () -> Validador.correo("juan@correo.com"));
+        probar("correo malo", () -> Validador.correo("juan@"));
+        probar("identificación buena", () -> Validador.soloDigitos("1002345678", "La identificación", 5, 20));
+        probar("identificación con letras", () -> Validador.soloDigitos("12ab", "La identificación", 5, 20));
+        probar("precio negativo", () -> Validador.positivoP(new BigDecimal("-5"), "El precio"));
+        probar("stock negativo", () -> Validador.noNegativo(-1, "El stock"));
+        probar("stock cero", () -> Validador.noNegativo(0, "El stock"));
+    }
 
-        Venta venta = new Venta();
-        venta.agregarItem(new ItemVenta(galaxy, 1, new BigDecimal("3500000")));
-        venta.agregarItem(new ItemVenta(moto, 2, new BigDecimal("600000")));
-
-        System.out.println("Subtotal: " + venta.getSubtotal());
-        System.out.println("IVA:      " + venta.getIva());
-        System.out.println("Total:    " + venta.getTotal());
-        System.out.println("Gama:     " + CategoriaGama.desdeNombre("media"));
+    private static void probar(String descripcion, Runnable validacion) {
+        try {
+            validacion.run();
+            System.out.println("OK        | " + descripcion);
+        } catch (DatosInvalidosException e) {
+            System.out.println("Rechazado | " + descripcion + " -> " + e.getMessage());
+        }
     }
 }
