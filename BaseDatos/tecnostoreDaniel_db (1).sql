@@ -52,7 +52,7 @@ CREATE TABLE persona (
     identificacion  VARCHAR(20)  NOT NULL,
     correo          VARCHAR(100) NOT NULL,
     telefono        VARCHAR(20)  NOT NULL,
-    contrasena      VARCHAR(255) NOT NULL,
+    contraseña      VARCHAR(255) NOT NULL,
     CONSTRAINT uq_persona_identificacion UNIQUE (identificacion),
     CONSTRAINT fk_persona_tipo FOREIGN KEY (id_tipo_persona)
         REFERENCES tipo_persona(id)
@@ -163,7 +163,7 @@ INSERT INTO celular (id_marca, modelo, precio, stock, id_sistema_operativo, id_g
 (1, 'Galaxy A15',      750000, 20, 1, 2),
 (3, 'Poco C65',        500000, 15, 1, 3);
 
-INSERT INTO persona (id, id_tipo_persona, nombre, identificacion, correo, telefono, contrasena) VALUES
+INSERT INTO persona (id, id_tipo_persona, nombre, identificacion, correo, telefono, contraseña) VALUES
 (1, 3, 'Administrador Principal', '1000000001', 'admin@tecnostore.com',  '3000000001', 'admin123'),
 (2, 2, 'Carlos Ramírez',          '1002345678', 'carlos@tecnostore.com', '3012223344', 'vendedor123'),
 (3, 2, 'Laura Gómez',             '1003456789', 'laura@tecnostore.com',  '3023334455', 'vendedor123'),
