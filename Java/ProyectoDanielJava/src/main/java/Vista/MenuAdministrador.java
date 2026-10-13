@@ -3,6 +3,7 @@ package Vista;
 
 import Controlador.CelularControlador;
 import Controlador.ClienteControlador;
+import Controlador.VentaControlador;
 import Modelo.CategoriaGama;
 import Modelo.Persona;
 import java.math.BigDecimal;
@@ -13,21 +14,23 @@ public class MenuAdministrador implements Menu {
     private final Consola consola;
     private final CelularControlador celulares;
     private final ClienteControlador clientes;
+    private final VentaControlador ventas;
 
-    public MenuAdministrador(Consola consola, CelularControlador celulares, ClienteControlador clientes) {
+    public MenuAdministrador(Consola consola, CelularControlador celulares, ClienteControlador clientes,
+                             VentaControlador ventas) {
         this.consola = consola;
         this.celulares = celulares;
         this.clientes = clientes;
+        this.ventas = ventas;
     }
 
     @Override
     public void mostrar(Persona usuario) {
         while (true) {
-            
             int opcion = consola.pedirOpcion("MENÚ ADMINISTRADOR", "Cerrar sesión",
                     "Listar celulares", "Registrar celular", "Actualizar celular", "Eliminar celular",
-                    "Listar clientes", "Actualizar cliente", "Eliminar cliente");
-            
+                    "Listar clientes", "Actualizar cliente", "Eliminar cliente",
+                    "Listar ventas", "Ver detalle de una venta");
             if (opcion == 0) {
                 return;
             }
@@ -39,6 +42,8 @@ public class MenuAdministrador implements Menu {
                 case 5 -> consola.ejecutar(() -> consola.mostrarClientes(clientes.listar()));
                 case 6 -> consola.ejecutar(this::actualizarCliente);
                 case 7 -> consola.ejecutar(this::eliminarCliente);
+                case 8 -> consola.ejecutar(() -> consola.mostrarVentas(ventas.listar()));
+                case 9 -> consola.ejecutar(this::verDetalleVenta);
                 default -> consola.imprimir("Opción no válida.");
             }
         }
@@ -46,7 +51,6 @@ public class MenuAdministrador implements Menu {
 
 
     private void actualizarCelular() {
-        
         consola.mostrarCelulares(celulares.listar());
         int id = consola.leerEntero("Id del celular a actualizar: ");
         consola.imprimir("Ingresa los nuevos datos:");
@@ -54,7 +58,6 @@ public class MenuAdministrador implements Menu {
     }
 
     private void pedirCelular(Integer idExistente) {
-        
         String marca = consola.elejir("Marca", celulares.listarMarcas());
         String modelo = consola.leerTexto("Modelo: ");
         BigDecimal precio = consola.leerDecimal("Precio: ");
@@ -72,7 +75,6 @@ public class MenuAdministrador implements Menu {
     }
 
     private void eliminarCelular() {
-        
         consola.mostrarCelulares(celulares.listar());
         celulares.eliminar(consola.leerEntero("Id del celular a eliminar: "));
         consola.imprimir("Celular eliminado.");
@@ -80,7 +82,6 @@ public class MenuAdministrador implements Menu {
 
 
     private void actualizarCliente() {
-        
         consola.mostrarClientes(clientes.listar());
         int id = consola.leerEntero("Id del cliente a actualizar: ");
         String nombre = consola.leerTexto("Nuevo nombre: ");
@@ -91,9 +92,14 @@ public class MenuAdministrador implements Menu {
     }
 
     private void eliminarCliente() {
-        
         consola.mostrarClientes(clientes.listar());
         clientes.eliminar(consola.leerEntero("Id del cliente a eliminar: "));
         consola.imprimir("Cliente eliminado.");
+    }
+
+
+    private void verDetalleVenta() {
+        consola.mostrarVentas(ventas.listar());
+        consola.mostrarDetalleVenta(ventas.buscarPorId(consola.leerEntero("Id de la venta: ")));
     }
 }

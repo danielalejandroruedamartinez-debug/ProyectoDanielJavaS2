@@ -24,7 +24,7 @@ public class GestorUsuarios {
                 .orElseThrow(() -> new DatosInvalidosException("Correo o contraseña incorrectos"));
         
         if (!persona.getContraseña().equals(contraseña)) {
-            throw new DatosInvalidosException("Correo o contraseña incorrecrtos");
+            throw new DatosInvalidosException("Correo o contraseña incorrectos");
         }
         return persona;
     }
