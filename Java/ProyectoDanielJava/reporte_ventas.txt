@@ -1,0 +1,32 @@
+REPORTE DE VENTAS - TECNOSTORE
+Generado: 2026-10-13 18:43
+==================================================
+Venta #1 | 2026-10-11 19:24
+  Cliente:  Juan Pérez
+  Vendedor: Carlos Ramírez
+    - Samsung Galaxy S24 x1 a $3.500.000,00
+    - Motorola Moto G14 x2 a $600.000,00
+  Subtotal: $4.700.000,00
+  IVA (19%): $893.000,00
+  TOTAL:    $5.593.000,00
+--------------------------------------------------
+Venta #2 | 2026-10-11 19:24
+  Cliente:  María López
+  Vendedor: Laura Gómez
+    - Apple iPhone 15 x1 a $4.800.000,00
+  Subtotal: $4.800.000,00
+  IVA (19%): $912.000,00
+  TOTAL:    $5.712.000,00
+--------------------------------------------------
+Venta #3 | 2026-10-13 18:12
+  Cliente:  papulince
+  Vendedor: Carlos Ramírez
+    - Samsung Galaxy S24 x1 a $3.500.000,00
+    - Apple iPhone 15 x1 a $4.800.000,00
+    - Xiaomi Redmi Note 13 x5 a $900.000,00
+  Subtotal: $12.800.000,00
+  IVA (19%): $2.432.000,00
+  TOTAL:    $15.232.000,00
+--------------------------------------------------
+Ventas registradas: 3
+TOTAL GENERAL: $26.537.000,00

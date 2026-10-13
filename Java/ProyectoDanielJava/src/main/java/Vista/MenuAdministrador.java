@@ -15,13 +15,15 @@ public class MenuAdministrador implements Menu {
     private final CelularControlador celulares;
     private final ClienteControlador clientes;
     private final VentaControlador ventas;
+    private final Menu menuReportes;
 
     public MenuAdministrador(Consola consola, CelularControlador celulares, ClienteControlador clientes,
-                             VentaControlador ventas) {
+                             VentaControlador ventas, Menu menuReportes) {
         this.consola = consola;
         this.celulares = celulares;
         this.clientes = clientes;
         this.ventas = ventas;
+        this.menuReportes = menuReportes;
     }
 
     @Override
@@ -30,7 +32,7 @@ public class MenuAdministrador implements Menu {
             int opcion = consola.pedirOpcion("MENÚ ADMINISTRADOR", "Cerrar sesión",
                     "Listar celulares", "Registrar celular", "Actualizar celular", "Eliminar celular",
                     "Listar clientes", "Actualizar cliente", "Eliminar cliente",
-                    "Listar ventas", "Ver detalle de una venta");
+                    "Listar ventas", "Ver detalle de una venta", "Reportes");
             if (opcion == 0) {
                 return;
             }
@@ -44,6 +46,7 @@ public class MenuAdministrador implements Menu {
                 case 7 -> consola.ejecutar(this::eliminarCliente);
                 case 8 -> consola.ejecutar(() -> consola.mostrarVentas(ventas.listar()));
                 case 9 -> consola.ejecutar(this::verDetalleVenta);
+                case 10 -> menuReportes.mostrar(usuario);
                 default -> consola.imprimir("Opción no válida.");
             }
         }

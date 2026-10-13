@@ -3,6 +3,7 @@ package com.clases.proyectodanieljava;
 
 import Controlador.CelularControlador;
 import Controlador.ClienteControlador;
+import Controlador.ReporteControlador;
 import Controlador.UsuarioControlador;
 import Controlador.VentaControlador;
 import Excepciones.ErrorSistemaException;
@@ -21,6 +22,7 @@ import Vista.Menu;
 import Vista.MenuAdministrador;
 import Vista.MenuCliente;
 import Vista.MenuPrincipal;
+import Vista.MenuReportes;
 import Vista.MenuVendedor;
 import java.sql.Connection;
 import java.util.EnumMap;
@@ -49,17 +51,18 @@ public class Main {
             ClienteControlador clienteControlador = new ClienteControlador(gestorClientes);
             UsuarioControlador usuarioControlador = new UsuarioControlador(gestorUsuarios);
             VentaControlador ventaControlador = new VentaControlador(gestorVentas);
+            ReporteControlador reporteControlador = new ReporteControlador(gestorCelulares, gestorVentas);
 
             // Vista
             Consola consola = new Consola();
+            Menu menuReportes = new MenuReportes(consola, reporteControlador);
 
             Map<TipoPersona, Menu> menus = new EnumMap<>(TipoPersona.class);
-            menus.put(TipoPersona.ADMINISTRADOR,
-                    new MenuAdministrador(consola, celularControlador, clienteControlador, ventaControlador));
-            menus.put(TipoPersona.VENDEDOR,
-                    new MenuVendedor(consola, celularControlador, clienteControlador, ventaControlador));
-            menus.put(TipoPersona.CLIENTE,
-                    new MenuCliente(consola, celularControlador, ventaControlador));
+            menus.put(TipoPersona.ADMINISTRADOR, new MenuAdministrador(consola, celularControlador,
+                    clienteControlador, ventaControlador, menuReportes));
+            menus.put(TipoPersona.VENDEDOR, new MenuVendedor(consola, celularControlador,
+                    clienteControlador, ventaControlador, menuReportes));
+            menus.put(TipoPersona.CLIENTE, new MenuCliente(consola, celularControlador, ventaControlador));
 
             new MenuPrincipal(consola, usuarioControlador, clienteControlador, menus).iniciar();
         } catch (ErrorSistemaException e) {

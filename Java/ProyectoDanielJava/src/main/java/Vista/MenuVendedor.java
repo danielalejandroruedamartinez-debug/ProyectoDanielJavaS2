@@ -15,13 +15,15 @@ public class MenuVendedor implements Menu {
     private final CelularControlador celulares;
     private final ClienteControlador clientes;
     private final VentaControlador ventas;
+    private final Menu menuReportes;
 
     public MenuVendedor(Consola consola, CelularControlador celulares, ClienteControlador clientes,
-                        VentaControlador ventas) {
+                        VentaControlador ventas, Menu menuReportes) {
         this.consola = consola;
         this.celulares = celulares;
         this.clientes = clientes;
         this.ventas = ventas;
+        this.menuReportes = menuReportes;
     }
 
     @Override
@@ -32,7 +34,7 @@ public class MenuVendedor implements Menu {
             
             int opcion = consola.pedirOpcion("MENÚ VENDEDOR", "Cerrar sesión",
                     "Listar celulares", "Registrar cliente", "Listar clientes",
-                    "Registrar venta", "Listar ventas", "Ver detalle de una venta");
+                    "Registrar venta", "Listar ventas", "Ver detalle de una venta", "Reportes");
             
             if (opcion == 0) {
                 return;
@@ -44,6 +46,7 @@ public class MenuVendedor implements Menu {
                 case 4 -> consola.ejecutar(() -> registrarVenta(vendedor));
                 case 5 -> consola.ejecutar(() -> consola.mostrarVentas(ventas.listar()));
                 case 6 -> consola.ejecutar(this::verDetalle);
+                case 7 -> menuReportes.mostrar(usuario);
                 default -> consola.imprimir("Opción no válida.");
             }
         }
