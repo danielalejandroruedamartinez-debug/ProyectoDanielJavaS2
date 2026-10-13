@@ -1,13 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package Controlador;
 
-/**
- *
- * @author daniel
- */
+package Controlador;
+ 
+import Modelo.Persona;
+import Servicio.GestorUsuarios;
+
+
 public class UsuarioControlador {
     
+    private final GestorUsuarios gestor;
+    
+    public UsuarioControlador(GestorUsuarios gestor) {
+        this.gestor = gestor;
+    }
+    
+    public Persona login(String correo, String contraseña) {
+        return gestor.login(correo, contraseña);
+    }
 }

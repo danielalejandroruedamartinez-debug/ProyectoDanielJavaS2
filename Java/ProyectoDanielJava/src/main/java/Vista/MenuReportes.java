@@ -8,6 +8,6 @@ package Vista;
  *
  * @author daniel
  */
-public class MenuReportes implements Menu {
+public class MenuReportes {
     
 }

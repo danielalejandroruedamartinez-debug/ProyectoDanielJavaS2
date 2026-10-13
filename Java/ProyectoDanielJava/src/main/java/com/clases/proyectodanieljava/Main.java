@@ -1,21 +1,29 @@
 
 package com.clases.proyectodanieljava;
 
-// al momento de subrr el respectivo comitt los errores de la prueba ya estaran solucionados
 import Controlador.CelularControlador;
 import Controlador.ClienteControlador;
+import Controlador.UsuarioControlador;
 import Excepciones.ErrorSistemaException;
+import Modelo.TipoPersona;
 import Persistencia.CelularDAO;
 import Persistencia.ClienteDAO;
 import Persistencia.ConexionDB;
 import Persistencia.UsuarioDAO;
 import Servicio.GestorCelulares;
 import Servicio.GestorClientes;
+import Servicio.GestorUsuarios;
 import Vista.Consola;
-import Vista.MenuCelularesTemporal;
-import Vista.MenuClienteTemporal;
+import Vista.Menu;
+import Vista.MenuAdministrador;
+import Vista.MenuCliente;
+import Vista.MenuPrincipal;
+import Vista.MenuVendedor;
 import java.sql.Connection;
+import java.util.EnumMap;
+import java.util.Map;
 
+/** Aquí se crean todos los objetos y se conectan entre sí. */
 public class Main {
 
     public static void main(String[] args) {
@@ -30,28 +38,25 @@ public class Main {
             // Servicio
             GestorCelulares gestorCelulares = new GestorCelulares(celularDAO);
             GestorClientes gestorClientes = new GestorClientes(clienteDAO, usuarioDAO);
+            GestorUsuarios gestorUsuarios = new GestorUsuarios(usuarioDAO);
 
             // Controlador
             CelularControlador celularControlador = new CelularControlador(gestorCelulares);
             ClienteControlador clienteControlador = new ClienteControlador(gestorClientes);
+            UsuarioControlador usuarioControlador = new UsuarioControlador(gestorUsuarios);
 
             // Vista
             Consola consola = new Consola();
-            MenuCelularesTemporal menuCelulares = new MenuCelularesTemporal(consola, celularControlador);
-            MenuClienteTemporal menuClientes = new MenuClienteTemporal(consola, clienteControlador);
 
-            OUTER:
-            while (true) {
-                int opcion = consola.pedirOpcion("PRUEBAS", "Salir", "Celulares", "Clientes");
-                switch (opcion) {
-                    case 0 -> {
-                        break OUTER;
-                    }
-                    case 1 -> menuCelulares.iniciar();
-                    case 2 -> menuClientes.iniciar();
-                    default -> consola.imprimir("Opción no válida.");
-                }
-            }
+            Map<TipoPersona, Menu> menus = new EnumMap<>(TipoPersona.class);
+            menus.put(TipoPersona.ADMINISTRADOR,
+                    new MenuAdministrador(consola, celularControlador, clienteControlador));
+            menus.put(TipoPersona.VENDEDOR,
+                    new MenuVendedor(consola, celularControlador, clienteControlador));
+            menus.put(TipoPersona.CLIENTE,
+                    new MenuCliente(consola, celularControlador));
+
+            new MenuPrincipal(consola, usuarioControlador, clienteControlador, menus).iniciar();
         } catch (ErrorSistemaException e) {
             System.out.println("Error: " + e.getMessage());
         } finally {

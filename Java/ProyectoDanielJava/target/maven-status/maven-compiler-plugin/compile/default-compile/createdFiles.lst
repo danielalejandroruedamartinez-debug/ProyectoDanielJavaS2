@@ -21,13 +21,12 @@ Modelo/Venta.class
 Modelo/ItemVenta.class
 Persistencia/CelularDAO.class
 Persistencia/ClienteDAO.class
+Persistencia/UsuarioDAO$1.class
 Excepciones/StockInsuficienteException.class
-Vista/MenuCelularesTemporal.class
 Modelo/Vendedor.class
 Vista/MenuVendedor.class
 Util/ReporteUtils.class
 Vista/Menu.class
-Vista/MenuClienteTemporal.class
 Util/ArchivoUtils.class
 Vista/Consola.class
 Servicio/GestorUsuarios.class
@@ -38,3 +37,4 @@ Modelo/Cliente.class
 Modelo/Administrador.class
 Controlador/ReporteControlador.class
 Persistencia/VentaDAO.class
+Vista/MenuCliente.class
