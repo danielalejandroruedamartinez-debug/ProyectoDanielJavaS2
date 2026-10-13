@@ -23,7 +23,7 @@ public class Validador {
     
     public static String correo(String valor) {
         
-        String v = noVacio(valor, "EL correo");
+        String v = noVacio(valor, "El correo");
         
         if (!CORREO.matcher(v).matches()) {
             throw new DatosInvalidosException(" El formato del correo no es valido ");            

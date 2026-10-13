@@ -1,13 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package Util;
 
-/**
- *
- * @author daniel
- */
+import java.math.BigDecimal;
+import java.util.Locale;
+
 public class ReporteUtils {
     
+    private static final Locale CO = Locale.forLanguageTag("es-CO");
+    
+    private ReporteUtils() { }
+    
+    public static String dinero(BigDecimal valor) {
+        return String.format(CO, "$%,.2f", valor);
+    }
 }

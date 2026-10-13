@@ -17,7 +17,7 @@ public class CelularControlador {
     
     public List<Celular> listar() { return gestor.listar(); }
     
-    public List<String> listarMarcas() { return gestor.listarSistemasOperativos(); }
+    public List<String> listarMarcas() { return gestor.listarMarcas(); }
     
     public List<String> listarSistemasOperativos() { return gestor.listarSistemasOperativos(); }
     
