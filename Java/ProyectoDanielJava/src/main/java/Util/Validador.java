@@ -31,14 +31,14 @@ public class Validador {
         return v;
     }
     
-    public static void soloDigitos(String valor, String campo, int min, int max) {
+    public static String soloDigitos(String valor, String campo, int min, int max) {
         
         String v = noVacio(valor, campo);
         
-        if (!DIGITOS.matcher(v).matches() || v.length() < min || v.length() > max){
-            throw new DatosInvalidosException(campo + " Debe tener solo digitos ");
-            
+        if (!DIGITOS.matcher(v).matches() || v.length() < min || v.length() > max) {
+            throw new DatosInvalidosException(campo + " debe tener solo números (entre " + min + " y " + max + " dígitos)");
         }
+        return v;
     }
         
     public static void positivoP(BigDecimal valor, String campo) {

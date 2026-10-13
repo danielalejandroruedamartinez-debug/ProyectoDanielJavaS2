@@ -91,16 +91,25 @@ public class Consola {
             imprimir("Opcion no valida.");
         }
     }
+
+//    public void ejecutar(Runnable accion) {
+//        try {
+//            accion.run();
+//        } catch (DatosInvalidosException | StockInsuficienteException | ErrorSistemaException e) {
+//            imprimir("Error: " + e.getMessage());
+//        }
+//    }
     
     public void ejecutar(Runnable accion) {
         try {
             accion.run();
         } catch (DatosInvalidosException | StockInsuficienteException | ErrorSistemaException e) {
             imprimir("Error: " + e.getMessage());
+            if (e.getCause() != null) {
+                imprimir("   Causa técnica: " + e.getCause().getMessage());
+            }
         }
     }
-    
-    
     
     public void mostrarCelulares(List<Celular> lista) {
         
