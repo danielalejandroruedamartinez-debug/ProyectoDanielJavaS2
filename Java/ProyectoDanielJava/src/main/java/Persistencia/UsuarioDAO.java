@@ -14,6 +14,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UsuarioDAO {
     
@@ -114,6 +117,137 @@ public class UsuarioDAO {
         p.setTelefono(rs.getString("telefono"));
         p.setContraseña(rs.getString("contraseña"));
         return p;
+    }
+    
+        // ---------- vendedores ----------
+
+    private static final String SELECT_VENDEDOR =
+            "SELECT v.id AS id_vendedor, v.cargo, v.fecha_ingreso, p.id AS id_persona,"
+            + " p.nombre, p.identificacion, p.correo, p.telefono"
+            + " FROM vendedor v"
+            + " JOIN persona p ON p.id = v.id_persona";
+
+    private static Vendedor mapearVendedor(ResultSet rs) throws SQLException {
+        Vendedor v = new Vendedor();
+        v.setIdVendedor(rs.getInt("id_vendedor"));
+        v.setId(rs.getInt("id_persona"));
+        v.setTipo(TipoPersona.VENDEDOR);
+        v.setNombre(rs.getString("nombre"));
+        v.setIdentificacion(rs.getString("identificacion"));
+        v.setCorreo(rs.getString("correo"));
+        v.setTelefono(rs.getString("telefono"));
+        v.setCargo(rs.getString("cargo"));
+        v.setFechaIngreso(rs.getDate("fecha_ingreso").toLocalDate());
+        return v;
+    }
+
+    public List<Vendedor> listarVendedores() {
+        try (PreparedStatement ps = con.prepareStatement(SELECT_VENDEDOR + " ORDER BY v.id");
+             ResultSet rs = ps.executeQuery()) {
+            List<Vendedor> lista = new ArrayList<>();
+            while (rs.next()) {
+                lista.add(mapearVendedor(rs));
+            }
+            return lista;
+        } catch (SQLException e) {
+            throw new ErrorSistemaException("Error al listar los vendedores", e);
+        }
+    }
+
+    public void guardarVendedor(Vendedor vendedor) {
+        SqlHelper.transaccion(con, "No se pudo guardar el vendedor", () -> {
+            int idPersona = SqlHelper.insertarPersona(con, vendedor);
+            vendedor.setId(idPersona);
+            try (PreparedStatement ps = con.prepareStatement(
+                    "INSERT INTO vendedor (id_persona, cargo, fecha_ingreso) VALUES (?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS)) {
+                ps.setInt(1, idPersona);
+                ps.setString(2, vendedor.getCargo());
+                ps.setDate(3, Date.valueOf(vendedor.getFechaIngreso()));
+                ps.executeUpdate();
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    rs.next();
+                    vendedor.setIdVendedor(rs.getInt(1));
+                }
+            }
+        });
+    }
+
+    public void eliminarVendedor(int idVendedor) {
+        SqlHelper.eliminar(con,
+                "DELETE FROM persona WHERE id = (SELECT id_persona FROM vendedor WHERE id = ?)", idVendedor);
+    }
+
+    // ---------- administradores ----------
+
+    private static final String SELECT_ADMIN =
+            "SELECT a.id AS id_admin, a.es_principal, a.id_admin_creador, a.fecha_registro,"
+            + " p.id AS id_persona, p.nombre, p.identificacion, p.correo, p.telefono"
+            + " FROM administrador a"
+            + " JOIN persona p ON p.id = a.id_persona";
+
+    private static Administrador mapearAdmin(ResultSet rs) throws SQLException {
+        Administrador a = new Administrador();
+        a.setIdAdministrador(rs.getInt("id_admin"));
+        a.setId(rs.getInt("id_persona"));
+        a.setTipo(TipoPersona.ADMINISTRADOR);
+        a.setNombre(rs.getString("nombre"));
+        a.setIdentificacion(rs.getString("identificacion"));
+        a.setCorreo(rs.getString("correo"));
+        a.setTelefono(rs.getString("telefono"));
+        a.setPrincipal(rs.getBoolean("es_principal"));
+        int creador = rs.getInt("id_admin_creador");
+        a.setIdAdminCreator(rs.wasNull() ? null : creador);
+        a.setFechaRegistro(rs.getTimestamp("fecha_registro").toLocalDateTime());
+        return a;
+    }
+
+    public List<Administrador> listarAdministradores() {
+        try (PreparedStatement ps = con.prepareStatement(SELECT_ADMIN + " ORDER BY a.id");
+             ResultSet rs = ps.executeQuery()) {
+            List<Administrador> lista = new ArrayList<>();
+            while (rs.next()) {
+                lista.add(mapearAdmin(rs));
+            }
+            return lista;
+        } catch (SQLException e) {
+            throw new ErrorSistemaException("Error al listar los administradores", e);
+        }
+    }
+
+    public Optional<Administrador> buscarAdministrador(int idAdmin) {
+        try (PreparedStatement ps = con.prepareStatement(SELECT_ADMIN + " WHERE a.id = ?")) {
+            ps.setInt(1, idAdmin);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? Optional.of(mapearAdmin(rs)) : Optional.empty();
+            }
+        } catch (SQLException e) {
+            throw new ErrorSistemaException("Error al buscar el administrador", e);
+        }
+    }
+
+    public void guardarAdministrador(Administrador admin) {
+        SqlHelper.transaccion(con, "No se pudo guardar el administrador", () -> {
+            int idPersona = SqlHelper.insertarPersona(con, admin);
+            admin.setId(idPersona);
+            try (PreparedStatement ps = con.prepareStatement(
+                    "INSERT INTO administrador (id_persona, es_principal, id_admin_creador) VALUES (?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS)) {
+                ps.setInt(1, idPersona);
+                ps.setInt(2, admin.isPrincipal() ? 1 : 0);
+                ps.setObject(3, admin.getIdAdminCreator());
+                ps.executeUpdate();
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    rs.next();
+                    admin.setIdAdministrador(rs.getInt(1));
+                }
+            }
+        });
+    }
+
+    public void eliminarAdministrador(int idAdmin) {
+        SqlHelper.eliminar(con,
+                "DELETE FROM persona WHERE id = (SELECT id_persona FROM administrador WHERE id = ?)", idAdmin);
     }
 }
     

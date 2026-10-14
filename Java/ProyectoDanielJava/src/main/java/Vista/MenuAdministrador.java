@@ -8,6 +8,8 @@ import Modelo.CategoriaGama;
 import Modelo.Persona;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import Controlador.UsuarioControlador;
+import Modelo.Administrador;
 
 public class MenuAdministrador implements Menu {
 
@@ -16,23 +18,29 @@ public class MenuAdministrador implements Menu {
     private final ClienteControlador clientes;
     private final VentaControlador ventas;
     private final Menu menuReportes;
+    private final UsuarioControlador usuarios;
 
     public MenuAdministrador(Consola consola, CelularControlador celulares, ClienteControlador clientes,
-                             VentaControlador ventas, Menu menuReportes) {
+                             VentaControlador ventas, Menu menuReportes, UsuarioControlador usuarios) {
         this.consola = consola;
         this.celulares = celulares;
         this.clientes = clientes;
         this.ventas = ventas;
         this.menuReportes = menuReportes;
+        this.usuarios = usuarios;
     }
 
     @Override
     public void mostrar(Persona usuario) {
+        Administrador admin = (Administrador) usuario;
         while (true) {
             int opcion = consola.pedirOpcion("MENÚ ADMINISTRADOR", "Cerrar sesión",
                     "Listar celulares", "Registrar celular", "Actualizar celular", "Eliminar celular",
                     "Listar clientes", "Actualizar cliente", "Eliminar cliente",
-                    "Listar ventas", "Ver detalle de una venta", "Reportes");
+                    "Listar ventas", "Ver detalle de una venta", "Reportes",
+                    "Listar vendedores", "Registrar vendedor", "Eliminar vendedor",
+                    "Listar administradores", "Crear administrador (solo el principal)",
+                    "Eliminar administrador (solo el principal)");
             if (opcion == 0) {
                 return;
             }
@@ -47,6 +55,12 @@ public class MenuAdministrador implements Menu {
                 case 8 -> consola.ejecutar(() -> consola.mostrarVentas(ventas.listar()));
                 case 9 -> consola.ejecutar(this::verDetalleVenta);
                 case 10 -> menuReportes.mostrar(usuario);
+                case 11 -> consola.ejecutar(() -> consola.mostrarVendedores(usuarios.listarVendedores()));
+                case 12 -> consola.ejecutar(this::registrarVendedor);
+                case 13 -> consola.ejecutar(this::eliminarVendedor);
+                case 14 -> consola.ejecutar(() -> consola.mostrarAdministradores(usuarios.listarAdministradores()));
+                case 15 -> consola.ejecutar(() -> crearAdministrador(admin));
+                case 16 -> consola.ejecutar(() -> eliminarAdministrador(admin));
                 default -> consola.imprimir("Opción no válida.");
             }
         }
@@ -104,5 +118,43 @@ public class MenuAdministrador implements Menu {
     private void verDetalleVenta() {
         consola.mostrarVentas(ventas.listar());
         consola.mostrarDetalleVenta(ventas.buscarPorId(consola.leerEntero("Id de la venta: ")));
+    }
+    
+        // ---------- vendedores ----------
+
+    private void registrarVendedor() {
+        String nombre = consola.leerTexto("Nombre: ");
+        String identificacion = consola.leerTexto("Identificación: ");
+        String correo = consola.leerTexto("Correo: ");
+        String telefono = consola.leerTexto("Teléfono: ");
+        String contraseña = consola.leerTexto("Contraseña: ");
+        String cargo = consola.leerTexto("Cargo: ");
+        usuarios.registrarVendedor(nombre, identificacion, correo, telefono, contraseña, cargo,
+                consola.leerFecha("Fecha de ingreso"));
+        consola.imprimir("Vendedor registrado.");
+    }
+
+    private void eliminarVendedor() {
+        consola.mostrarVendedores(usuarios.listarVendedores());
+        usuarios.eliminarVendedor(consola.leerEntero("Id del vendedor a eliminar: "));
+        consola.imprimir("Vendedor eliminado.");
+    }
+
+    // ---------- administradores ----------
+
+    private void crearAdministrador(Administrador actual) {
+        String nombre = consola.leerTexto("Nombre: ");
+        String identificacion = consola.leerTexto("Identificación: ");
+        String correo = consola.leerTexto("Correo: ");
+        String telefono = consola.leerTexto("Teléfono: ");
+        String contraseña = consola.leerTexto("Contraseña: ");
+        usuarios.crearAdministrador(actual, nombre, identificacion, correo, telefono, contraseña);
+        consola.imprimir("Administrador creado.");
+    }
+
+    private void eliminarAdministrador(Administrador actual) {
+        consola.mostrarAdministradores(usuarios.listarAdministradores());
+        usuarios.eliminarAdministrador(actual, consola.leerEntero("Id del administrador a eliminar: "));
+        consola.imprimir("Administrador eliminado.");
     }
 }

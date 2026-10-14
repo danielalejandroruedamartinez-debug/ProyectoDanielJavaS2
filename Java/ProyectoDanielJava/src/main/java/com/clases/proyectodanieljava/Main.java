@@ -58,8 +58,8 @@ public class Main {
             Menu menuReportes = new MenuReportes(consola, reporteControlador);
 
             Map<TipoPersona, Menu> menus = new EnumMap<>(TipoPersona.class);
-            menus.put(TipoPersona.ADMINISTRADOR, new MenuAdministrador(consola, celularControlador,
-                    clienteControlador, ventaControlador, menuReportes));
+                        menus.put(TipoPersona.ADMINISTRADOR, new MenuAdministrador(consola, celularControlador,
+                    clienteControlador, ventaControlador, menuReportes, usuarioControlador));
             menus.put(TipoPersona.VENDEDOR, new MenuVendedor(consola, celularControlador,
                     clienteControlador, ventaControlador, menuReportes));
             menus.put(TipoPersona.CLIENTE, new MenuCliente(consola, celularControlador, ventaControlador));
