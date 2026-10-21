@@ -1,0 +1,45 @@
+REPORTE DE STOCK BAJO - TECNOSTORE
+Generado: 2026-10-21 11:41
+==================================================
+Celular:    1
+  Modelo:   Galaxy S24
+  Marca:    Samsung
+  Cantidad Disponible: 1
+  Precio    3500000.00
+Celular:    2
+  Modelo:   iPhone 15
+  Marca:    Apple
+  Cantidad Disponible: 4
+  Precio    4800000.00
+Celular:    3
+  Modelo:   Redmi Note 13
+  Marca:    Xiaomi
+  Cantidad Disponible: 20
+  Precio    900000.00
+Celular:    4
+  Modelo:   Moto G14
+  Marca:    Motorola
+  Cantidad Disponible: 30
+  Precio    600000.00
+Celular:    5
+  Modelo:   Galaxy A15
+  Marca:    Samsung
+  Cantidad Disponible: 20
+  Precio    750000.00
+Celular:    6
+  Modelo:   Poco C65
+  Marca:    Xiaomi
+  Cantidad Disponible: 5
+  Precio    500000.00
+Celular:    9
+  Modelo:   aña
+  Marca:    Samsung
+  Cantidad Disponible: 1
+  Precio    3000.00
+Celular:    11
+  Modelo:   hola
+  Marca:    Samsung
+  Cantidad Disponible: 10
+  Precio    20.00
+Celulares registradas: 8
+Celulares con StockBajo: [Modelo.Celular@185d8b6, Modelo.Celular@67784306, Modelo.Celular@335eadca]
